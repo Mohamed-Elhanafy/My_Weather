@@ -77,4 +77,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.logging)
 
+    // Google Play Services Location
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
 }
