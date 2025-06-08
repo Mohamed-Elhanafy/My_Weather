@@ -1,14 +1,10 @@
 package com.example.myweather.presentation
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.myweather.android.LocationPermissionHandler
 import com.example.myweather.domain.usecase.GetLocationUseCase

@@ -6,10 +6,10 @@ import com.example.myweather.domain.exception.MyWeatherException
 import com.example.myweather.domain.model.Location
 import com.example.myweather.domain.model.Weather
 import com.example.myweather.domain.repository.WeatherRepository
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.request.get
 
 class WeatherRepositoryImpl(private val httpClient: HttpClient) : WeatherRepository {
 

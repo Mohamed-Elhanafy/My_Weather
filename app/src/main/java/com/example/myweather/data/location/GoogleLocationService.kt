@@ -3,7 +3,6 @@ package com.example.myweather.data.location
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
-import android.location.Location as AndroidLocation
 import android.os.Looper
 import com.example.myweather.domain.exception.MyWeatherException
 import com.example.myweather.domain.location.LocationService
@@ -14,10 +13,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import java.util.Locale
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.Locale
+import android.location.Location as AndroidLocation
 
 class GoogleLocationService(private val context: Context) : LocationService {
 
