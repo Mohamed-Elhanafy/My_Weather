@@ -15,7 +15,7 @@ class WeatherRepositoryImpl(private val httpClient: HttpClient) : WeatherReposit
 
     override suspend fun getCurrentWeather(location: Location): Weather {
         return apiCall {
-            val url = "$OPEN_METEO_URL?latitude=${location.latitude}&longitude=${location.longitude}&current_weather=true&hourly=temperature_2m"
+            val url = "$OPEN_METEO_URL?latitude=${location.latitude}&longitude=${location.longitude}&current_weather=true&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto"
             val response = httpClient.get(url)
             val weatherDTO = response.body<WeatherDTO>()
             weatherDTO.toWeather()

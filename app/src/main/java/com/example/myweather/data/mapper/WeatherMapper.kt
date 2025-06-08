@@ -2,13 +2,17 @@ package com.example.myweather.data.mapper
 
 import com.example.myweather.data.model.CurrentWeatherDTO
 import com.example.myweather.data.model.CurrentWeatherUnitsDTO
+import com.example.myweather.data.model.DailyDTO
+import com.example.myweather.data.model.DailyUnitsDTO
 import com.example.myweather.data.model.HourlyDTO
 import com.example.myweather.data.model.HourlyUnitsDTO
 import com.example.myweather.data.model.WeatherDTO
 import com.example.myweather.domain.model.CurrentWeather
+import com.example.myweather.domain.model.DailyForecast
 import com.example.myweather.domain.model.HourlyWeather
 import com.example.myweather.domain.model.Measurement
 import com.example.myweather.domain.model.Weather
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
 fun CurrentWeatherDTO.toCurrentWeather(units: CurrentWeatherUnitsDTO?): CurrentWeather {
@@ -37,16 +41,29 @@ fun HourlyDTO.toHourlyForecast(units: HourlyUnitsDTO?): List<HourlyWeather> {
     val tempUnit = units?.temperature ?: ""
 
     return times.zip(temperatures).map { (timeStr, tempValue) ->
-        val dateTime = try {
-            LocalDateTime.parse(timeStr)
-        } catch (e: Exception) {
-            // Handle cases where parsing might fail
-            null
-        }
         HourlyWeather(
             time = timeStr,
-            dateTime = dateTime,
+            dateTime = LocalDateTime.parse(timeStr),
             temperature = Measurement(value = tempValue, unit = tempUnit)
+        )
+    }
+}
+
+fun DailyDTO.toDailyForecasts(units: DailyUnitsDTO?): List<DailyForecast> {
+    val times = this.time ?: return emptyList()
+    val weatherCodes = this.weatherCode ?: return emptyList()
+    val maxTemps = this.temperatureMax ?: return emptyList()
+    val minTemps = this.temperatureMin ?: return emptyList()
+
+    val maxTempUnit = units?.temperatureMax ?: ""
+    val minTempUnit = units?.temperatureMin ?: ""
+
+    return times.indices.mapNotNull { index ->
+        DailyForecast(
+            date = LocalDate.parse(times[index]), // Parse the string to LocalDate
+            weatherCode = weatherCodes.getOrNull(index) ?: 0,
+            maxTemperature = Measurement(maxTemps.getOrNull(index) ?: 0.0, maxTempUnit),
+            minTemperature = Measurement(minTemps.getOrNull(index) ?: 0.0, minTempUnit)
         )
     }
 }
@@ -62,7 +79,9 @@ fun WeatherDTO.toWeather(): Weather {
             weatherCode = 0,
             isDay = false
         )
+
     val hourlyForecast = this.hourly?.toHourlyForecast(this.hourlyUnits) ?: emptyList()
+    val dailyForecasts = this.daily?.toDailyForecasts(this.dailyUnits) ?: emptyList()
 
     return Weather(
         currentWeather = safeCurrentWeather,
@@ -70,6 +89,7 @@ fun WeatherDTO.toWeather(): Weather {
         longitude = this.longitude ?: 0.0,
         timezone = this.timezone ?: "Unknown",
         elevation = this.elevation ?: 0.0,
-        hourlyForecast = hourlyForecast
+        hourlyForecast = hourlyForecast,
+        dailyForecasts = dailyForecasts
     )
 }
