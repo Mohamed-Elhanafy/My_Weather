@@ -5,5 +5,6 @@ data class Weather(
     val latitude: Double,
     val longitude: Double,
     val timezone: String,
-    val elevation: Double
+    val elevation: Double,
+    val hourlyForecast: List<HourlyWeather>
 )
