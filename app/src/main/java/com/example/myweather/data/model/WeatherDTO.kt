@@ -13,5 +13,7 @@ data class WeatherDTO(
     @SerialName("longitude") val longitude: Double? = null,
     @SerialName("timezone") val timezone: String? = null,
     @SerialName("timezone_abbreviation") val timezoneAbbreviation: String? = null,
-    @SerialName("utc_offset_seconds") val utcOffsetSeconds: Int? = null
+    @SerialName("utc_offset_seconds") val utcOffsetSeconds: Int? = null,
+    @SerialName("hourly_units") val hourlyUnits: HourlyUnitsDTO? = null,
+    @SerialName("hourly") val hourly: HourlyDTO? = null
 )
