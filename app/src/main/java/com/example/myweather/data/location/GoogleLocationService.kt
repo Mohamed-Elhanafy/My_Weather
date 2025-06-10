@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
 import android.os.Looper
+import androidx.annotation.RequiresPermission
 import com.example.myweather.domain.exception.MyWeatherException
 import com.example.myweather.domain.location.LocationService
 import com.example.myweather.domain.model.Location
@@ -21,8 +22,7 @@ import android.location.Location as AndroidLocation
 
 class GoogleLocationService(private val context: Context) : LocationService {
 
-    private val fusedLocationClient: FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(context)
+    private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     private val geocoder by lazy { Geocoder(context, Locale.getDefault()) }
 
     companion object {
@@ -30,48 +30,27 @@ class GoogleLocationService(private val context: Context) : LocationService {
         private const val MAX_GEOCODER_RESULTS = 1
     }
 
-    @SuppressLint("MissingPermission")
+    @RequiresPermission(allOf = [android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun getCurrentLocation(): Flow<Location> = callbackFlow {
         val locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY, LOCATION_UPDATE_INTERVAL_MS
         ).build()
 
-        fun buildLocation(androidLocation: AndroidLocation, name: String?): Location =
-            Location(
-                latitude = androidLocation.latitude,
-                longitude = androidLocation.longitude,
-                name = name
-            )
+        fun buildLocation(androidLocation: AndroidLocation, name: String): Location =
+            Location(latitude = androidLocation.latitude, longitude = androidLocation.longitude, name = name)
 
         fun getLocationNameAsync(latitude: Double, longitude: Double, onResult: (String?) -> Unit) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(latitude, longitude, MAX_GEOCODER_RESULTS, object : Geocoder.GeocodeListener {
-                    override fun onGeocode(addresses: MutableList<android.location.Address>) {
-                        val address = addresses.firstOrNull()
-                        val name =address?.adminArea ?: address?.countryName ?: address?.getAddressLine(0)
-                        onResult(name)
-                    }
-                    override fun onError(errorMessage: String?) {
-                        onResult(null)
-                    }
-                })
-            } else {
-                @Suppress("DEPRECATION")
-                try {
-                    val addresses = geocoder.getFromLocation(latitude, longitude, MAX_GEOCODER_RESULTS)
-                    val address = addresses?.firstOrNull()
-                    val name =  address?.adminArea ?: address?.countryName ?: address?.getAddressLine(0)
-                    onResult(name)
-                } catch (e: Exception) {
-                    onResult(null)
-                }
-            }
+            @Suppress("DEPRECATION")
+            val addresses = geocoder.getFromLocation(latitude, longitude, MAX_GEOCODER_RESULTS)
+            val address = addresses?.firstOrNull()
+            val name = address?.adminArea ?: address?.countryName ?: address?.getAddressLine(0)
+            onResult(name)
         }
 
         fusedLocationClient.lastLocation.addOnSuccessListener { androidLocation: AndroidLocation? ->
             androidLocation?.let {
                 getLocationNameAsync(it.latitude, it.longitude) { name ->
-                    trySend(buildLocation(it, name))
+                    trySend(buildLocation(it, name.toString()))
                 }
             }
         }
@@ -80,7 +59,7 @@ class GoogleLocationService(private val context: Context) : LocationService {
             override fun onLocationResult(result: LocationResult) {
                 result.lastLocation?.let { androidLocation ->
                     getLocationNameAsync(androidLocation.latitude, androidLocation.longitude) { name ->
-                        trySend(buildLocation(androidLocation, name))
+                        trySend(buildLocation(androidLocation, name.toString()))
                     }
                 }
             }
@@ -88,11 +67,9 @@ class GoogleLocationService(private val context: Context) : LocationService {
 
         try {
             fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
+                locationRequest, locationCallback, Looper.getMainLooper()
             )
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             close(MyWeatherException.LocationException("Missing location permissions"))
             return@callbackFlow
         } catch (e: Exception) {
