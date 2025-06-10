@@ -17,8 +17,8 @@ val surfaceLight = Color.White
 val surfaceDark = Color(0xFF0D0C19)
 
 // Custom gradient colors for WeatherScreen
-val gradientDefaultEndColorLight = Color(0xFFBAE2FC)  // Light theme default end color
-val gradientTargetEndColorLight = Color(0xFFA2D9FB)   // Light theme target end color
+val gradientDefaultEndColorLight = Color(0xFFc0e5fc)  // Light theme default end color
+val gradientTargetEndColorLight = Color(0xFF8fd1fb)   // Light theme target end color
 val gradientDefaultEndColorDark = Color(0xFF090716)   // Dark theme default end color
 val gradientTargetEndColorDark = Color(0xFF070615)    // Dark theme target end color
 
