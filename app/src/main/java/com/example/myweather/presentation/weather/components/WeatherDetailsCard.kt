@@ -1,4 +1,4 @@
-package com.example.myweather.presentation.home.components
+package com.example.myweather.presentation.weather.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +28,7 @@ import com.example.myweather.R
 import com.example.myweather.presentation.common.theme.MyWeatherTheme
 
 @Composable
-fun WeatherDetailsCard(@DrawableRes icon: Int , text: String ,label: String , modifier: Modifier = Modifier) {
+fun WeatherDetailsCard(@DrawableRes icon: Int, text: String, label: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.border(
             width = 1.dp,
@@ -44,13 +43,17 @@ fun WeatherDetailsCard(@DrawableRes icon: Int , text: String ,label: String , mo
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().padding(vertical = 16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 16.dp)
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = icon),
                 contentDescription = null,
                 tint = Color(0xFF87CEFA),
-                modifier = Modifier.padding(8.dp).size(32.dp)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(32.dp)
             )
             Text(
                 text = text,
@@ -77,12 +80,10 @@ fun WeatherDetailsCard(@DrawableRes icon: Int , text: String ,label: String , mo
 @Composable
 private fun WeatherDetailsCardPreview() {
     MyWeatherTheme {
-        Surface {
-            WeatherDetailsCard(
-                icon = R.drawable.ic_humidity,
-                text = "78%",
-                label = "Humidity",
-            )
-        }
+        WeatherDetailsCard(
+            icon = R.drawable.ic_humidity,
+            text = "78%",
+            label = "Humidity",
+        )
     }
 }

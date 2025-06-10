@@ -1,4 +1,4 @@
-package com.example.myweather.presentation.home.components
+package com.example.myweather.presentation.weather.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myweather.R
@@ -50,6 +52,7 @@ fun TemperatureInfo(temperature: String, weatherDescription: String, heightTemp:
             fontWeight = FontWeight.Light,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             Modifier
                 .background(
@@ -77,22 +80,22 @@ fun TemperatureInfo(temperature: String, weatherDescription: String, heightTemp:
 }
 
 @Composable
-fun TemperatureRangeItem(@DrawableRes icon: Int, text: String, modifier: Modifier = Modifier) {
+fun TemperatureRangeItem(@DrawableRes icon: Int, text: String, modifier: Modifier = Modifier, colorAlpha : Float =0.6f, textSize: TextUnit = 16.sp) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.5.dp)) {
         Icon(
             imageVector = ImageVector.vectorResource(id = icon),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+            tint = MaterialTheme.colorScheme.onBackground.copy(alpha =colorAlpha),
             modifier = Modifier.size(12.dp)
         )
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
-            fontSize = 16.sp,
+            fontSize = textSize,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Light,
             letterSpacing = 0.25.sp,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = colorAlpha)
         )
     }
 }

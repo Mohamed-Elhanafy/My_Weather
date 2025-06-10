@@ -1,4 +1,4 @@
-package com.example.myweather.presentation.home.components
+package com.example.myweather.presentation.weather.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
@@ -16,12 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myweather.R
-
-data class WeatherDetailItem(
-    @DrawableRes val icon: Int,
-    val text: String,
-    val label: String
-)
+import com.example.myweather.presentation.weather.WeatherDetailItem
 
 @Composable
 fun WeatherDetailsGrid(
@@ -49,7 +44,6 @@ fun WeatherDetailsGrid(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF87CEFA)
