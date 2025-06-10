@@ -8,4 +8,14 @@ data class Weather(
     val elevation: Double,
     val hourlyForecast: List<HourlyWeather>,
     val dailyForecasts: List<DailyForecast>,
+){
+    constructor(): this(
+        currentWeather = CurrentWeather(),
+        latitude = 0.0,
+        longitude = 0.0,
+        timezone = "",
+        elevation = 0.0,
+        hourlyForecast = emptyList(),
+        dailyForecasts = emptyList(),
     )
+}

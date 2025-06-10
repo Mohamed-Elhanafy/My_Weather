@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeatherDTO(
-    @SerialName("current_weather") val currentWeather: CurrentWeatherDTO? = null,
-    @SerialName("current_weather_units") val currentWeatherUnits: CurrentWeatherUnitsDTO? = null,
+    @SerialName("current") val current: CurrentDTO? = null,
+    @SerialName("current_units") val currentUnits: CurrentUnitsDTO? = null,
     @SerialName("elevation") val elevation: Double? = null,
     @SerialName("generationtime_ms") val generationTimeMs: Double? = null,
     @SerialName("latitude") val latitude: Double? = null,
