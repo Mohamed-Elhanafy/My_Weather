@@ -7,4 +7,9 @@ data class Measurement(
     override fun toString(): String {
         return "$value$unit"
     }
+
+    constructor() :this(
+        value = 0.0,
+        unit = ""
+    )
 }
